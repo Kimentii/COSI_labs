@@ -76,7 +76,7 @@ public class Complex {
         return a.times(b.reciprocal());
     }
 
-    public Complex divides(int param) {
+    public Complex divides(double param) {
         return new Complex(this.re / param, this.im / param);
     }
 

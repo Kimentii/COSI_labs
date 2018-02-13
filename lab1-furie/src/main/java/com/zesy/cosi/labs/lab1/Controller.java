@@ -28,25 +28,21 @@ public class Controller {
     LineChart<Number, Number> thirdLineChart;
     @FXML
     LineChart<Number, Number> fourthLineChart;
-    @FXML
-    LineChart<Number, Number> fifthLineChart;
 
 
     public void initialize() {
-/*        Complex[] values = new Complex[20];
-        for (int i = 0; i < values.length; i++) {
-            values[i] = new Complex(i + 1, i * 2);
-        }
-        double ys[] = new double[10];
-        for (int i = 0; i < ys.length; i++) {
-            ys[i] = i + 1;
-        }*/
-        GraphicsCreator.showGraphic(firstLineChart, FUNCTION, PERIOD, N);
-        Complex C[] = FourierFunctions.getDiscreteFourierTransform(FUNCTION, PERIOD, N);
-        GraphicsCreator.showGraphic(secondLineChart, C);
-        double X[] = FourierFunctions.getReverseFourierTransform(C, PERIOD, N);
-        GraphicsCreator.showGraphic(thirdLineChart, X, PERIOD);
         createGraphicButton.setOnMouseClicked((MouseEvent event) -> {
+            GraphicsCreator.showGraphic(firstLineChart, FUNCTION, PERIOD, N);
+
+            Complex discreteFourierTransformResult[] = FourierFunctions.getDiscreteFourierTransform(FUNCTION, PERIOD, N);
+            GraphicsCreator.showGraphic(secondLineChart, discreteFourierTransformResult);
+
+            Complex fastFourierTransformResult[] = FourierFunctions.getFastFourierTransform(FUNCTION, PERIOD, N);
+            GraphicsCreator.showGraphic(thirdLineChart, fastFourierTransformResult);
+            System.out.println(fastFourierTransformResult.length);
+
+            double reverseFourierTransformResult[] = FourierFunctions.getReverseFourierTransform(discreteFourierTransformResult, PERIOD, N);
+            GraphicsCreator.showGraphic(fourthLineChart, reverseFourierTransformResult, PERIOD);
 
         });
     }

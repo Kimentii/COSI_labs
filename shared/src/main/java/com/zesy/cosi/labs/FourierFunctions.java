@@ -19,18 +19,6 @@ public class FourierFunctions {
         for (Complex c : a) {
             System.out.println(c);
         }
-
-        System.out.println("-");
-        System.out.println("----");
-        System.out.println("-------");
-        System.out.println("----------");
-        System.out.println("-------------");
-        System.out.println("----------");
-        System.out.println("-------");
-        System.out.println("----");
-        System.out.println("-");
-
-
     }
 
     /**
@@ -47,22 +35,29 @@ public class FourierFunctions {
             result[i] = new Complex(0, 0);
         }
 
-        for (int i = 0; i < N; i++) {
-
-        }
         for (int k = 0; k < N; k++) {
             for (int n = 0; n < N; n++) {
                 Complex a = new Complex(cos(period * k * ((double) n) / N), -sin(period * k * ((double) n / N)));
                 double x = function.apply(period * ((double) n) / N);
-//                System.out.println("result["+k+"]+=a("+a+")*x("+x+")="+a.times(x));
                 result[k] = result[k].plus(a.times(x));
             }
+            result[k] = result[k].divides(N);
+
         }
         return result;
     }
 
     public static Complex[] getFastFourierTransform(Function<Double, Double> function, double period, int N) {
-        return null;
+        Complex[] source = new Complex[N];
+        for (int i = 0; i < N; i++) {
+            source[i] = new Complex(function.apply(period * (double)i / N));
+        }
+        Complex[] result = getFastFourierTransformRecursive(source, period);
+
+        for (int i = 0; i < N; i++) {
+            result[i] = result[i].divides(N);
+        }
+        return result;
     }
 
     public static double[] getReverseFourierTransform(Complex[] values, double period, int N) {
@@ -80,19 +75,27 @@ public class FourierFunctions {
 
     }
 
-//    private static Complex[] commonDiscreteFourierTransformation(Complex[] values, float period, int N, boolean reverse) {
-//        Complex[] result = new Complex[N];
-//        for (int i = 0; i < N; i++) {
-//            result[i] = new Complex(0, 0);
-//        }
-//        for (int k = 0; k < N; k++) {
-//            for (int i = 0; i < N; i++) {
-//                Complex a = new Complex(cos(period * k * ((double)i)/N), -sin(period * k * ((double)i/N)));
-//                Complex x = new Complex(function.apply(period * ((double)k)/N));
-////                System.out.println("result["+k+"]+=a("+a+")*x("+x+")");
-//                result[k] = result[k].plus(a.times(x));
-//            }
-//        }
-//        return result;
-//    }
+    private static Complex[] getFastFourierTransformRecursive(Complex[] sourceArray, double period) {
+        if (sourceArray.length == 1) return sourceArray;
+        Complex evenArray[] = new Complex[sourceArray.length/2];
+        Complex oddArray[] = new Complex[sourceArray.length/2];
+        for (int i = 0; i < sourceArray.length; i++) {
+            if (i % 2 == 0) {
+                evenArray[i/2] = sourceArray[i];
+            } else {
+                oddArray[i/2] = sourceArray[i];
+            }
+        }
+        Complex[] evenResult = getFastFourierTransformRecursive(evenArray, period);
+        Complex[] oddResult = getFastFourierTransformRecursive(oddArray, period);
+        Complex[] result = new Complex[sourceArray.length];
+        Complex Wn = new Complex(cos(period / sourceArray.length), sin(period / sourceArray.length));
+        Complex w = new Complex(1);
+        for (int i = 0; i < sourceArray.length/2; i++) {
+            result[i] = evenResult[i].plus(w.times(oddResult[i]));
+            result[i + sourceArray.length/2] = evenResult[i].minus(w.times(oddResult[i]));
+            w = w.times(Wn);
+        }
+        return result;
+    }
 }
