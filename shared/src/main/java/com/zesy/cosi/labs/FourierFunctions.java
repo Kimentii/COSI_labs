@@ -51,11 +51,11 @@ public class FourierFunctions {
 
         }
         for (int k = 0; k < N; k++) {
-            for (int n = 0; n < N; n++) {
-                Complex a = new Complex(cos(period * k * ((double) n) / N), -sin(period * k * ((double) n / N)));
-                double x = function.apply(period * ((double) n) / N);
+            for (int m = 0; m < N; m++) {
+                Complex a = new Complex(cos(m * k * ((double) period) / N), -sin(m * k * ((double) period / N)));
+                double x = function.apply(period * ((double) m) / N);
 //                System.out.println("result["+k+"]+=a("+a+")*x("+x+")="+a.times(x));
-                result[k] = result[k].plus(a.times(x));
+                result[k] = result[k].plus((a.times(x)).divides(N));
             }
         }
         return result;
