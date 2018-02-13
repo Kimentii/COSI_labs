@@ -10,23 +10,25 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 
-public class Main {//extends Application {
+public class Main extends Application {
 
-    public static void main(String[] args) throws Exception {
-        InputStream tmp = Main.class.getClassLoader().getResourceAsStream("sample.fxml");
-        System.out.println(tmp.available());
+    private static Stage stage;
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        Main.stage = primaryStage;
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("sample.fxml"));
+        primaryStage.setTitle("Hello World");
+        primaryStage.setScene(new Scene(root));
+        primaryStage.show();
     }
-//
-//    @Override
-//    public void start(Stage primaryStage) throws Exception{
-//        Parent root = FXMLLoader.load(getClass().getResource("../../resources/sample.fxml"));
-//        primaryStage.setTitle("Hello World");
-//        primaryStage.setScene(new Scene(root, 300, 275));
-//        primaryStage.show();
-//    }
-//
-//
-//    public static void main(String[] args) {
-//        launch(args);
-//    }
+
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    public static Stage getStage() {
+        return stage;
+    }
 }

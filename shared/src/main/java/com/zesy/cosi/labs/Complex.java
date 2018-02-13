@@ -58,6 +58,7 @@ public class Complex {
     }
 
     public Complex times(double alpha) {
+        multiplyCounter++;
         return new Complex(alpha * re, alpha * im);
     }
 
