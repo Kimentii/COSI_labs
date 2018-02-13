@@ -42,7 +42,6 @@ public class FourierFunctions {
                 result[k] = result[k].plus(a.times(x));
             }
             result[k] = result[k].divides(N);
-
         }
         return result;
     }
