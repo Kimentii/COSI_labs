@@ -2,16 +2,101 @@ package com.zesy.cosi.labs;
 
 import java.util.function.Function;
 
+import static java.lang.Math.*;
+
+/**
+ * Implements functions for Fourier transformation.
+ *
+ * @author  zoxal
+ * @version 13/02/18
+ */
 public class FourierFunctions {
-    public static Object[] getDiscreteFourierTransform(Function<Float, Float> function, float period, int N) {
+    public static void main(String[] args) {
+//        System.out.println(cos(-2*PI/3));
+//        System.out.println(sin(-2*PI/3));
+
+        Complex[] a = getDiscreteFourierTransform((x) -> sin(6*x) + cos(5*x), 2*PI, 32);
+        for (Complex c : a) {
+            System.out.println(c);
+        }
+
+        System.out.println("-");
+        System.out.println("----");
+        System.out.println("-------");
+        System.out.println("----------");
+        System.out.println("-------------");
+        System.out.println("----------");
+        System.out.println("-------");
+        System.out.println("----");
+        System.out.println("-");
+
+        for (Complex c : getReverseFourierTransform(a, 2*PI, 32)) {
+            System.out.println(c);
+        }
+    }
+
+    /**
+     * Calculates discrete Fourier transformation.
+     *
+     *
+     * @param function      function to transform
+     * @param period        period of function
+     * @param N             amount of points
+     * @return              array of {@link Complex} numbers, representing phase graph
+     */
+    public static Complex[] getDiscreteFourierTransform(Function<Double, Double> function, double period, int N) {
+        Complex[] result = new Complex[N];
+        for (int i = 0; i < N; i++) {
+            result[i] = new Complex(0, 0);
+        }
+        for (int k = 0; k < N; k++) {
+            for (int n = 0; n < N; n++) {
+                Complex a = new Complex(-cos(period * k * ((double)n)/N), -sin(period * k * ((double)n/N)));
+                Complex x = new Complex(function.apply(period * ((double)n)/N));
+//                System.out.println("result["+k+"]+=a("+a+")*x("+x+")="+a.times(x));
+                result[k] = result[k].plus(a.times(x));
+            }
+        }
+        return result;
+    }
+
+    public static Complex[] getFastFourierTransform(Function<Double, Double> function, double period, int N) {
         return null;
     }
 
-    public static Object[] getFastFourierTransform(Function<Float, Float> function, float period, int N) {
-        return null;
+    public static Complex[] getReverseFourierTransform(Complex[] values, double period, int N) {
+//        Double[] result = new Double[][N];
+//        for (int i = 0; i < N; i++) {
+//            result[i] = 0d;
+//        }
+        Complex[] result = new Complex[N];
+        for (int i = 0; i < N; i++) {
+            result[i] = new Complex(0, 0);
+        }
+        for (int k = 0; k < N; k++) {
+            for (int i = 0; i < N; i++) {
+                Complex a = new Complex(cos(period * k * ((double)i)/N), sin(period * k * ((double)i/N)));
+
+//                System.out.println("result["+k+"]+=a("+a+")*x("+values[k]+")");
+                result[k] = result[k].plus(a.times(values[k]));
+            }
+        }
+        return result;
     }
 
-    public static Object[] getReverseFourierTransform(Object[] values, float period, int N) {
-        return null;
-    }
+//    private static Complex[] commonDiscreteFourierTransformation(Complex[] values, float period, int N, boolean reverse) {
+//        Complex[] result = new Complex[N];
+//        for (int i = 0; i < N; i++) {
+//            result[i] = new Complex(0, 0);
+//        }
+//        for (int k = 0; k < N; k++) {
+//            for (int i = 0; i < N; i++) {
+//                Complex a = new Complex(cos(period * k * ((double)i)/N), -sin(period * k * ((double)i/N)));
+//                Complex x = new Complex(function.apply(period * ((double)k)/N));
+////                System.out.println("result["+k+"]+=a("+a+")*x("+x+")");
+//                result[k] = result[k].plus(a.times(x));
+//            }
+//        }
+//        return result;
+//    }
 }
