@@ -49,7 +49,7 @@ public class FourierFunctions {
     public static Complex[] getFastFourierTransform(Function<Double, Double> function, double period, int N) {
         Complex[] source = new Complex[N];
         for (int i = 0; i < N; i++) {
-            source[i] = new Complex(function.apply(period * (double)i / N));
+            source[i] = new Complex(function.apply(period * (double) i / N));
         }
         Complex[] result = getFastFourierTransformRecursive(source, period);
 
@@ -76,13 +76,13 @@ public class FourierFunctions {
 
     private static Complex[] getFastFourierTransformRecursive(Complex[] sourceArray, double period) {
         if (sourceArray.length == 1) return sourceArray;
-        Complex evenArray[] = new Complex[sourceArray.length/2];
-        Complex oddArray[] = new Complex[sourceArray.length/2];
+        Complex evenArray[] = new Complex[sourceArray.length / 2];
+        Complex oddArray[] = new Complex[sourceArray.length / 2];
         for (int i = 0; i < sourceArray.length; i++) {
             if (i % 2 == 0) {
-                evenArray[i/2] = sourceArray[i];
+                oddArray[i / 2] = sourceArray[i];
             } else {
-                oddArray[i/2] = sourceArray[i];
+                evenArray[i / 2] = sourceArray[i];
             }
         }
         Complex[] evenResult = getFastFourierTransformRecursive(evenArray, period);
@@ -90,9 +90,9 @@ public class FourierFunctions {
         Complex[] result = new Complex[sourceArray.length];
         Complex Wn = new Complex(cos(period / sourceArray.length), sin(period / sourceArray.length));
         Complex w = new Complex(1);
-        for (int i = 0; i < sourceArray.length/2; i++) {
+        for (int i = 0; i < sourceArray.length / 2; i++) {
             result[i] = evenResult[i].plus(w.times(oddResult[i]));
-            result[i + sourceArray.length/2] = evenResult[i].minus(w.times(oddResult[i]));
+            result[i + sourceArray.length / 2] = evenResult[i].minus(w.times(oddResult[i]));
             w = w.times(Wn);
         }
         return result;

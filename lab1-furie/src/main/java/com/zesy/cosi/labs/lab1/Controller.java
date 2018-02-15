@@ -28,6 +28,8 @@ public class Controller {
     LineChart<Number, Number> thirdLineChart;
     @FXML
     LineChart<Number, Number> fourthLineChart;
+    @FXML
+    LineChart<Number, Number> fifthLineChart;
 
 
     public void initialize() {
@@ -43,6 +45,10 @@ public class Controller {
 
             double reverseFourierTransformResult[] = FourierFunctions.getReverseFourierTransform(discreteFourierTransformResult, PERIOD, N);
             GraphicsCreator.showGraphic(fourthLineChart, reverseFourierTransformResult, PERIOD);
+
+
+            reverseFourierTransformResult = FourierFunctions.getReverseFourierTransform(fastFourierTransformResult, PERIOD, N);
+            GraphicsCreator.showGraphic(fifthLineChart, reverseFourierTransformResult, PERIOD);
 
         });
     }
