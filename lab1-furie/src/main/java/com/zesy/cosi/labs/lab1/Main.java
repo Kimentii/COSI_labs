@@ -6,29 +6,29 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.InputStream;
+import java.io.IOException;
 import java.net.URL;
 
 public class Main extends Application {
-
-    private static Stage stage;
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        Main.stage = primaryStage;
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("sample.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root));
-        primaryStage.show();
-    }
-
 
     public static void main(String[] args) {
         launch(args);
     }
 
-    public static Stage getStage() {
-        return stage;
+    @Override
+    public void start(Stage primaryStage) {
+        URL fxmlURL = getClass().getClassLoader().getResource("sample.fxml");
+        if (fxmlURL != null) {
+            try {
+                Parent root = FXMLLoader.load(fxmlURL);
+                primaryStage.setTitle("Преобразования Фурье");
+                primaryStage.setScene(new Scene(root));
+                primaryStage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Can not load fxml file");
+        }
     }
 }

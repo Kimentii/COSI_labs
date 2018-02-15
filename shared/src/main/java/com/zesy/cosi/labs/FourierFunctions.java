@@ -12,9 +12,6 @@ import static java.lang.Math.*;
  */
 public class FourierFunctions {
     public static void main(String[] args) {
-//        System.out.println(cos(-2*PI/3));
-//        System.out.println(sin(-2*PI/3));
-
         Complex[] a = getDiscreteFourierTransform((x) -> sin(6 * x) + cos(5 * x), 2 * PI, 32);
         for (Complex c : a) {
             System.out.println(c);
@@ -37,7 +34,7 @@ public class FourierFunctions {
 
         for (int k = 0; k < N; k++) {
             for (int n = 0; n < N; n++) {
-                Complex a = new Complex(cos(period * k * ((double) n) / N), -sin(period * k * ((double) n / N)));
+                Complex a = new Complex(cos(period * k * ((double) n) / N), sin(period * k * ((double) n / N)));
                 double x = function.apply(period * ((double) n) / N);
                 result[k] = result[k].plus(a.times(x));
             }
@@ -66,7 +63,7 @@ public class FourierFunctions {
         }
         for (int m = 0; m < N; m++) {
             for (int k = 0; k < N; k++) {
-                Complex W2 = new Complex(cos((-2 * PI) / N * (-m * k)), sin((-2 * PI) / N * (-m * k)));
+                Complex W2 = new Complex(cos((2 * PI) / N * (-m * k)), sin((2 * PI) / N * (-m * k)));
                 X[m] += (values[k].times(W2)).re();
             }
         }
@@ -80,9 +77,9 @@ public class FourierFunctions {
         Complex oddArray[] = new Complex[sourceArray.length / 2];
         for (int i = 0; i < sourceArray.length; i++) {
             if (i % 2 == 0) {
-                oddArray[i / 2] = sourceArray[i];
-            } else {
                 evenArray[i / 2] = sourceArray[i];
+            } else {
+                oddArray[i / 2] = sourceArray[i];
             }
         }
         Complex[] evenResult = getFastFourierTransformRecursive(evenArray, period);
